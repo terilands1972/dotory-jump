@@ -24,7 +24,7 @@
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
-            width: 400px;
+            width: 450px;
         }
         .active { display: block; }
         
@@ -63,15 +63,25 @@
         .shop-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 15px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 5px;
         }
+        /* 스크롤바 커스텀 */
+        .shop-grid::-webkit-scrollbar { width: 6px; }
+        .shop-grid::-webkit-scrollbar-thumb { background: #7f8c8d; border-radius: 4px; }
+        
         .shop-item {
             background-color: #2c3e50;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             border: 2px solid #7f8c8d;
         }
+        .shop-item h4 { margin: 5px 0; }
+        .shop-item p { margin: 5px 0; font-size: 14px; color: #bdc3c7; }
+        .shop-item button { font-size: 14px; padding: 6px 12px; width: 100%; margin: 5px 0 0 0; }
 
         /* 게임 화면 스타일 */
         #game-wrapper {
@@ -185,6 +195,27 @@
                 <p>가격: 150G</p>
                 <button id="btn-potato" onclick="buyOrEquip('potato')">구매</button>
             </div>
+            <!-- 신규 스킨 4종 추가 -->
+            <div class="shop-item" id="item-tiger">
+                <h4>산중호걸 (호랑이)</h4>
+                <p>가격: 150G</p>
+                <button id="btn-tiger" onclick="buyOrEquip('tiger')">구매</button>
+            </div>
+            <div class="shop-item" id="item-takoyaki">
+                <h4>타코야끼</h4>
+                <p>가격: 150G</p>
+                <button id="btn-takoyaki" onclick="buyOrEquip('takoyaki')">구매</button>
+            </div>
+            <div class="shop-item" id="item-baseball">
+                <h4>이성연 (야구공)</h4>
+                <p>가격: 150G</p>
+                <button id="btn-baseball" onclick="buyOrEquip('baseball')">구매</button>
+            </div>
+            <div class="shop-item" id="item-heart">
+                <h4>한승민&배주아</h4>
+                <p>가격: 150G</p>
+                <button id="btn-heart" onclick="buyOrEquip('heart')">구매</button>
+            </div>
         </div>
         <hr style="border-color:#7f8c8d; margin-top:20px;">
         <button onclick="switchScreen('lobby-screen')" style="background-color:#7f8c8d;">돌아가기</button>
@@ -194,7 +225,6 @@
     <div id="game-wrapper">
         <h2 style="margin:5px 0;">🐿️ 도토리의 파쿠르 대모험 🌳</h2>
         <div id="game-container">
-            <!-- 홈화면 가기 버튼 UI -->
             <div id="lobby-btn-container">
                 <button class="lobby-exit-btn" onclick="exitToLobby()">🏠 홈화면으로</button>
             </div>
@@ -213,6 +243,17 @@
 <script>
 let currentUser = null;
 let userData = {};
+
+const skinNames = {
+    default: '기본 도토리', 
+    chestnut: '밤톨이', 
+    trophy: '빅토리', 
+    potato: '감자도리',
+    tiger: '산중호걸 (호랑이)',
+    takoyaki: '타코야끼',
+    baseball: '이성연 (야구공)',
+    heart: '한승민&배주아 (하트)'
+};
 
 function switchScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -273,9 +314,7 @@ function logout() {
 function updateLobbyUI() {
     document.getElementById('user-nickname').innerText = userData.id;
     document.getElementById('user-gold').innerText = userData.gold;
-    
-    const skinNames = {default: '기본 도토리', chestnut: '밤톨이', trophy: '빅토리', potato: '감자도리'};
-    document.getElementById('user-skin').innerText = skinNames[userData.currentSkin];
+    document.getElementById('user-skin').innerText = skinNames[userData.currentSkin] || '기본 도토리';
     document.querySelectorAll('.current-gold').forEach(e => e.innerText = userData.gold);
 }
 
@@ -289,7 +328,11 @@ function saveUserData() {
 const skinsConfig = {
     chestnut: { name: "밤톨이", price: 150 },
     trophy: { name: "빅토리", price: 150 },
-    potato: { name: "감자도리", price: 150 }
+    potato: { name: "감자도리", price: 150 },
+    tiger: { name: "산중호걸", price: 150 },
+    takoyaki: { name: "타코야끼", price: 150 },
+    baseball: { name: "이성연", price: 150 },
+    heart: { name: "한승민&배주아", price: 150 }
 };
 
 function openShop() {
@@ -299,13 +342,14 @@ function openShop() {
 
 function updateShopUI() {
     updateLobbyUI();
-    ['chestnut', 'trophy', 'potato'].forEach(skinKey => {
+    Object.keys(skinsConfig).forEach(skinKey => {
         const btn = document.getElementById('btn-' + skinKey);
+        if(!btn) return;
         if(userData.unlockedSkins.includes(skinKey)) {
             btn.innerText = userData.currentSkin === skinKey ? "장착됨" : "장착하기";
             btn.style.backgroundColor = userData.currentSkin === skinKey ? "#2ecc71" : "#3498db";
         } else {
-            btn.innerText = "구매 (150G)";
+            btn.innerText = `구매 (${skinsConfig[skinKey].price}G)`;
             btn.style.backgroundColor = "#e67e22";
         }
     });
@@ -323,7 +367,7 @@ function buyOrEquip(skinKey) {
             alert(`${skinsConfig[skinKey].name} 스킨을 구매하고 장착했습니다!`);
             updateShopUI();
         } else {
-            alert("골드가 부족합니다! 스테이지를 깨서 골드를 모으세요.");
+            alert("골드가 부족합니다! 10스테이지를 완전히 클리어해서 골드를 모으세요.");
         }
     }
 }
@@ -419,6 +463,7 @@ function updateInGameUI() {
     document.getElementById('ingame-gold').innerText = userData.gold;
 }
 
+// --- 캐릭터 그래픽 랜더링 (신규 스킨 추가 완료) ---
 function drawCharacter(x, y, width, height, facing) {
     ctx.save();
     ctx.translate(x + width/2, y + height/2);
@@ -458,7 +503,6 @@ function drawCharacter(x, y, width, height, facing) {
         ctx.fillRect(-4, -h/2 + 16, 8, 8);
         ctx.fillRect(-w/2 + 4, -h/2 + 24, w - 8, 4);
         ctx.strokeStyle = '#f1c40f'; ctx.lineWidth = 2;
-        ctx.textBaseline = "middle";
         ctx.beginPath(); ctx.arc(-w/2, -h/2 + 6, 4, 0, Math.PI*2); ctx.stroke();
         ctx.beginPath(); ctx.arc(w/2, -h/2 + 6, 4, 0, Math.PI*2); ctx.stroke();
         ctx.fillStyle = '#000000'; ctx.font = 'bold 8px sans-serif'; ctx.fillText("v", -6, -h/2 + 6); ctx.fillText("v", 2, -h/2 + 6);
@@ -471,17 +515,60 @@ function drawCharacter(x, y, width, height, facing) {
         ctx.beginPath(); ctx.arc(2, -h/2 + 14, 7, 0, Math.PI*2); ctx.fill();
         ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 12, 1.5, 1.5); ctx.fillRect(-2, -h/2 + 12, 1.5, 1.5);
         ctx.strokeStyle = '#000000'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, -h/2 + 16); ctx.lineTo(3, -h/2 + 16); ctx.stroke();
+
+    } else if (currentSkin === 'tiger') { // 🐯 산중호걸 (호랑이)
+        ctx.fillStyle = '#e67e22'; // 주황색 몸통
+        ctx.fillRect(-w/2, -h/2 + 6, w, 22);
+        // 호랑이 귀
+        ctx.beginPath(); ctx.moveTo(-w/2, -h/2 + 6); ctx.lineTo(-w/2 + 6, -h/2); ctx.lineTo(-w/2 + 8, -h/2 + 6); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(w/2, -h/2 + 6); ctx.lineTo(w/2 - 6, -h/2); ctx.lineTo(w/2 - 8, -h/2 + 6); ctx.fill();
+        // 호랑이 검은 줄무늬
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(-w/2, -h/2 + 10, 6, 2); ctx.fillRect(w/2 - 6, -h/2 + 10, 6, 2);
+        ctx.fillRect(-w/2, -h/2 + 16, 8, 2); ctx.fillRect(w/2 - 8, -h/2 + 16, 8, 2);
+        // 눈
+        ctx.fillRect(3, -h/2 + 12, 2, 2); ctx.fillRect(-5, -h/2 + 12, 2, 2);
+
+    } else if (currentSkin === 'takoyaki') { // 🐙 타코야끼
+        ctx.fillStyle = '#edc9a0'; // 타코야끼 빵 색상
+        ctx.beginPath(); ctx.arc(0, -h/2 + 16, w/2 + 2, 0, Math.PI*2); ctx.fill();
+        // 갈색 소스 표현
+        ctx.fillStyle = '#5c3a21'; 
+        ctx.fillRect(-w/2 + 2, -h/2 + 6, w - 4, 4);
+        // 가쓰오부시/파 초록 점들
+        ctx.fillStyle = '#27ae60'; ctx.fillRect(-2, -h/2 + 5, 2, 2); ctx.fillRect(4, -h/2 + 8, 2, 2);
+        // 눈코입
+        ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 14, 2, 2); ctx.fillRect(-4, -h/2 + 14, 2, 2);
+        ctx.strokeStyle = '#000000'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(0, -h/2 + 16, 2, 0, Math.PI); ctx.stroke();
+
+    } else if (currentSkin === 'baseball') { // ⚾ 이성연 (야구공)
+        ctx.fillStyle = '#ffffff'; // 하얀 야구공
+        ctx.beginPath(); ctx.arc(0, -h/2 + 16, w/2 + 1, 0, Math.PI*2); ctx.fill();
+        ctx.strokeStyle = '#bdc3c7'; ctx.lineWidth = 1; ctx.stroke();
+        // 빨간 실밥 실선
+        ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(-w/2, -h/2 + 16, 10, -Math.PI/3, Math.PI/3); ctx.stroke();
+        ctx.beginPath(); ctx.arc(w/2, -h/2 + 16, 10, Math.PI - Math.PI/3, Math.PI + Math.PI/3); ctx.stroke();
+        // 얼굴 눈동자
+        ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 14, 2, 2); ctx.fillRect(-4, -h/2 + 14, 2, 2);
+
+    } else if (currentSkin === 'heart') { // 💖 한승민&배주아 (하트)
+        ctx.fillStyle = '#ff4757'; // 하트 핑크/레드
+        // 두 개의 원과 삼각형으로 하트 그리기
+        ctx.beginPath(); ctx.arc(-w/4, -h/2 + 12, w/4 + 1, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(w/4, -h/2 + 12, w/4 + 1, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(-w/2 - 1, -h/2 + 14); ctx.lineTo(w/2 + 1, -h/2 + 14); ctx.lineTo(0, -h/2 + 28);
+        ctx.closePath(); ctx.fill();
+        // 깜찍한 눈
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(2, -h/2 + 11, 2, 2); ctx.fillRect(-4, -h/2 + 11, 2, 2);
     }
 
+    // 캐릭터 공통 다리 및 이동 애니메이션 처리
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
-    const bodyBottomY = -h/2 + 24;
-
-    ctx.beginPath();
-    ctx.moveTo(-w/4, bodyBottomY - 4); ctx.lineTo(-w/2 - 3, bodyBottomY + 2);
-    ctx.moveTo(w/4, bodyBottomY - 4); ctx.lineTo(w/2 + 3, bodyBottomY + 2);
-    ctx.stroke();
+    const bodyBottomY = -h/2 + 26;
 
     ctx.beginPath();
     if (Math.abs(player.vx) > 0.5 && player.grounded) {
@@ -566,9 +653,9 @@ function handleDeath() {
 function nextStage() {
     currentStage++;
     
-    // 🌟 [수정 완료] 최종 게임 클리어 시점(10스테이지 완료 후)에만 100G 지급
+    // 최종 10스테이지 올 클리어 보상 처리
     if (currentStage > 10) {
-        userData.gold += 100; // 게임 완전 클리어 보상!!
+        userData.gold += 100;
         saveUserData();
         alert(`🎉 축하합니다! 마지막 10스테이지까지 모두 클리어하셨습니다!\n🎁 최종 클리어 보상 100G 획득!\n총 데스 수: ${deaths}`);
         exitToLobby();
