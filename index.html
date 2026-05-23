@@ -24,7 +24,7 @@
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
-            width: 450px;
+            width: 500px;
         }
         .active { display: block; }
         
@@ -58,12 +58,33 @@
             display: inline-block;
         }
 
+        /* 상점 탭 메뉴 스타일 */
+        .shop-tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            background: #2c3e50;
+            padding: 5px;
+            border-radius: 8px;
+        }
+        .shop-tab-btn {
+            background-color: transparent;
+            margin: 0;
+            padding: 8px 12px;
+            font-size: 14px;
+            flex: 1;
+        }
+        .shop-tab-btn.active-tab {
+            background-color: #3498db;
+            border-radius: 4px;
+        }
+
         .shop-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 15px;
-            max-height: 380px;
+            margin-top: 10px;
+            max-height: 340px;
             overflow-y: auto;
             padding-right: 5px;
         }
@@ -76,9 +97,9 @@
             border-radius: 8px;
             border: 2px solid #7f8c8d;
         }
-        .shop-item h4 { margin: 5px 0; font-size: 15px; }
-        .shop-item p { margin: 5px 0; font-size: 13px; color: #bdc3c7; }
-        .shop-item button { font-size: 14px; padding: 6px 12px; width: 100%; margin: 5px 0 0 0; }
+        .shop-item h4 { margin: 5px 0; font-size: 14px; }
+        .shop-item p { margin: 5px 0; font-size: 12px; color: #bdc3c7; }
+        .shop-item button { font-size: 13px; padding: 6px 12px; width: 100%; margin: 5px 0 0 0; }
 
         #game-wrapper {
             display: none;
@@ -159,71 +180,37 @@
         <h1 style="margin-top:0;">🐿️ 파쿠르 대모험 로비</h1>
         <p>반갑습니다, <span id="user-nickname" style="color:#f1c40f; font-weight:bold;"></span>님!</p>
         <p>보유 골드: <span id="user-gold" style="color:#f1c40f; font-weight:bold;">0</span> G</p>
-        <p>현재 장착 스킨: <span id="user-skin" style="color:#2ecc71; font-weight:bold;">기본 도토리</span></p>
+        <p style="font-size: 14px; color: #bdc3c7;">
+            장착 정보: 
+            [얼굴: <span id="user-skin" style="color:#2ecc71;">기본</span>] 
+            [다리: <span id="user-leg" style="color:#3498db;">기본</span>] <br>
+            [모자: <span id="user-hat" style="color:#e67e22;">기본</span>] 
+            [이펙트: <span id="user-effect" style="color:#9b59b6;">기본</span>]
+        </p>
         <hr style="border-color:#7f8c8d;">
         <button onclick="startGame()" style="font-size:20px; padding:15px 30px; width:100%;">🎮 게임 시작</button>
-        <button onclick="openShop()" style="font-size:18px; width:100%; margin-top:10px; background-color:#3498db;">🛒 상점 가기</button>
+        <button onclick="openShop()" style="font-size:18px; width:100%; margin-top:10px; background-color:#3498db;">🛒 커스텀 상점 가기</button>
         <button onclick="logout()" style="font-size:14px; width:100%; margin-top:10px; background-color:#95a5a6;">로그아웃</button>
     </div>
 
     <!-- 4. 상점 화면 -->
     <div id="shop-screen" class="screen">
-        <h2>🛒 캐릭터 스킨 상점</h2>
+        <h2>🛒 캐릭터 커스텀 상점</h2>
         <p>나의 골드: <span class="current-gold" style="color:#f1c40f; font-weight:bold;">0</span> G</p>
-        <div class="shop-grid">
-            <div class="shop-item" id="item-default">
-                <h4>기본 도토리</h4>
-                <p>보유중</p>
-                <button onclick="equipSkin('default')">장착</button>
-            </div>
-            <div class="shop-item" id="item-chestnut">
-                <h4>밤톨이</h4>
-                <p>가격: 150G</p>
-                <button id="btn-chestnut" onclick="buyOrEquip('chestnut')">구매</button>
-            </div>
-            <div class="shop-item" id="item-trophy">
-                <h4>빅토리 (트로피)</h4>
-                <p>가격: 150G</p>
-                <button id="btn-trophy" onclick="buyOrEquip('trophy')">구매</button>
-            </div>
-            <div class="shop-item" id="item-potato">
-                <h4>감자도리</h4>
-                <p>가격: 150G</p>
-                <button id="btn-potato" onclick="buyOrEquip('potato')">구매</button>
-            </div>
-            <div class="shop-item" id="item-tiger">
-                <h4>산중호걸 (호랑이)</h4>
-                <p>가격: 150G</p>
-                <button id="btn-tiger" onclick="buyOrEquip('tiger')">구매</button>
-            </div>
-            <div class="shop-item" id="item-takoyaki">
-                <h4>타코야끼</h4>
-                <p>가격: 150G</p>
-                <button id="btn-takoyaki" onclick="buyOrEquip('takoyaki')">구매</button>
-            </div>
-            <div class="shop-item" id="item-baseball">
-                <h4>이성연 (야구공)</h4>
-                <p>가격: 150G</p>
-                <button id="btn-baseball" onclick="buyOrEquip('baseball')">구매</button>
-            </div>
-            <div class="shop-item" id="item-heart">
-                <h4>한승민&배주아</h4>
-                <p>가격: 150G</p>
-                <button id="btn-heart" onclick="buyOrEquip('heart')">구매</button>
-            </div>
-            <div class="shop-item" id="item-duck">
-                <h4>곽여진 (오리)</h4>
-                <p>가격: 150G</p>
-                <button id="btn-duck" onclick="buyOrEquip('duck')">구매</button>
-            </div>
-            <div class="shop-item" id="item-question">
-                <h4>백서준 (물음표)</h4>
-                <p>가격: 150G</p>
-                <button id="btn-question" onclick="buyOrEquip('question')">구매</button>
-            </div>
+        
+        <!-- 상점 카테고리 탭 -->
+        <div class="shop-tabs">
+            <button class="shop-tab-btn active-tab" id="tab-face" onclick="changeShopTab('face')">👤 얼굴(스킨)</button>
+            <button class="shop-tab-btn" id="tab-legs" onclick="changeShopTab('legs')">🦿 다리</button>
+            <button class="shop-tab-btn" id="tab-hats" onclick="changeShopTab('hats')">⛑️ 모자</button>
+            <button class="shop-tab-btn" id="tab-effects" onclick="changeShopTab('effects')">✨ 이펙트</button>
         </div>
+
+        <!-- 아이템들이 동적으로 로드되는 그리드 -->
+        <div class="shop-grid" id="shop-items-container"></div>
+        
         <hr style="border-color:#7f8c8d; margin-top:20px;">
-        <button onclick="switchScreen('lobby-screen')" style="background-color:#7f8c8d;">돌아가기</button>
+        <button onclick="switchScreen('lobby-screen')" style="background-color:#7f8c8d;">로비로 돌아가기</button>
     </div>
 
     <!-- 5. 게임 플레이 화면 -->
@@ -248,18 +235,46 @@
 <script>
 let currentUser = null;
 let userData = {};
+let currentShopTab = 'face'; // 기본 탭은 얼굴
 
-const skinNames = {
-    default: '기본 도토리', 
-    chestnut: '밤톨이', 
-    trophy: '빅토리', 
-    potato: '감자도리',
-    tiger: '산중호걸 (호랑이)',
-    takoyaki: '타코야끼',
-    baseball: '이성연 (야구공)',
-    heart: '한승민&배주아 (하트)',
-    duck: '곽여진 (오리)',
-    question: '백서준 (물음표)'
+// 전체 아이템 정의 스펙 및 이름 정보
+const allItemsData = {
+    face: {
+        default: { name: '기본 도토리', price: 0 },
+        chestnut: { name: '밤톨이', price: 150 },
+        trophy: { name: '빅토리 (트로피)', price: 150 },
+        potato: { name: '감자도리', price: 150 },
+        tiger: { name: '산중호걸 (호랑이)', price: 150 },
+        takoyaki: { name: '타코야끼', price: 150 },
+        baseball: { name: '이성연 (야구공)', price: 150 },
+        heart: { name: '한승민&배주아', price: 150 },
+        duck: { name: '곽여진 (오리)', price: 150 },
+        question: { name: '백서준 (물음표)', price: 150 }
+    },
+    legs: {
+        default: { name: '기본 다리', price: 0 },
+        wood: { name: '나무 다리', price: 100 },
+        tigerLeg: { name: '호랑이 다리', price: 100 },
+        duckLeg: { name: '오리 다리', price: 120 },
+        toothpick: { name: '이쑤시개', price: 100 }
+    },
+    hats: {
+        default: { name: '기본 (없음)', price: 0 },
+        shell: { name: '밤 껍질 (가시)', price: 120 },
+        baseballCap: { name: '야구모자', price: 120 },
+        partyCap: { name: '생일모자', price: 120 },
+        katsuobushi: { name: '가쓰오부시', price: 120 },
+        angelRing: { name: '천사 링', price: 150 }
+    },
+    effects: {
+        default: { name: '기본 (없음)', price: 0 },
+        spikeEff: { name: '가시 이펙트', price: 130 },
+        sproutEff: { name: '새싹 이펙트', price: 130 },
+        teriyakiEff: { name: '데리야끼 소스', price: 130 },
+        runEff: { name: '달리기 이펙트', price: 130 },
+        duckFootEff: { name: '오리 발자국', price: 130 },
+        heartEff: { name: '하트 이펙트', price: 150 }
+    }
 };
 
 function switchScreen(screenId) {
@@ -277,17 +292,12 @@ function handleRegister() {
     const id = document.getElementById('reg-id').value.trim();
     const pw = document.getElementById('reg-pw').value.trim();
     if(!id || !pw) return alert("닉네임과 비밀번호를 입력해주세요.");
-    
-    if(localStorage.getItem('user_' + id)) {
-        return alert("이미 존재하는 닉네임입니다.");
-    }
+    if(localStorage.getItem('user_' + id)) return alert("이미 존재하는 닉네임입니다.");
     
     const newUserData = {
-        id: id,
-        pw: pw,
-        gold: 0,
-        currentSkin: 'default',
-        unlockedSkins: ['default']
+        id: id, pw: pw, gold: 0,
+        currentSkin: 'default', currentLeg: 'default', currentHat: 'default', currentEffect: 'default',
+        unlockedSkins: ['default'], unlockedLegs: ['default'], unlockedHats: ['default'], unlockedEffects: ['default']
     };
     localStorage.setItem('user_' + id, JSON.stringify(newUserData));
     alert("회원가입 완료! 로그인 해주세요.");
@@ -297,7 +307,6 @@ function handleRegister() {
 function handleLogin() {
     const id = document.getElementById('login-id').value.trim();
     const pw = document.getElementById('login-pw').value.trim();
-    
     const stored = localStorage.getItem('user_' + id);
     if(!stored) return alert("존재하지 않는 닉네임입니다.");
     
@@ -306,13 +315,18 @@ function handleLogin() {
     
     currentUser = id;
     userData = user;
+    
+    // 이전 하위 호환 구조 체크 및 보정
+    if(!userData.currentLeg) { userData.currentLeg = 'default'; userData.unlockedLegs = ['default']; }
+    if(!userData.currentHat) { userData.currentHat = 'default'; userData.unlockedHats = ['default']; }
+    if(!userData.currentEffect) { userData.currentEffect = 'default'; userData.unlockedEffects = ['default']; }
+
     updateLobbyUI();
     switchScreen('lobby-screen');
 }
 
 function logout() {
-    currentUser = null;
-    userData = {};
+    currentUser = null; userData = {};
     document.getElementById('login-id').value = '';
     document.getElementById('login-pw').value = '';
     switchScreen('login-screen');
@@ -321,7 +335,12 @@ function logout() {
 function updateLobbyUI() {
     document.getElementById('user-nickname').innerText = userData.id;
     document.getElementById('user-gold').innerText = userData.gold;
-    document.getElementById('user-skin').innerText = skinNames[userData.currentSkin] || '기본 도토리';
+    
+    document.getElementById('user-skin').innerText = allItemsData.face[userData.currentSkin]?.name || '기본';
+    document.getElementById('user-leg').innerText = allItemsData.legs[userData.currentLeg]?.name || '기본';
+    document.getElementById('user-hat').innerText = allItemsData.hats[userData.currentHat]?.name || '기본';
+    document.getElementById('user-effect').innerText = allItemsData.effects[userData.currentEffect]?.name || '기본';
+    
     document.querySelectorAll('.current-gold').forEach(e => e.innerText = userData.gold);
 }
 
@@ -331,59 +350,99 @@ function saveUserData() {
     }
 }
 
-const skinsConfig = {
-    chestnut: { name: "밤톨이", price: 150 },
-    trophy: { name: "빅토리", price: 150 },
-    potato: { name: "감자도리", price: 150 },
-    tiger: { name: "산중호걸", price: 150 },
-    takoyaki: { name: "타코야끼", price: 150 },
-    baseball: { name: "이성연", price: 150 },
-    heart: { name: "한승민&배주아", price: 150 },
-    duck: { name: "곽여진", price: 150 },
-    question: { name: "백서준", price: 150 }
-};
+// 상점 카테고리 전환 핸들러
+function changeShopTab(tabName) {
+    currentShopTab = tabName;
+    document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+    if(tabName === 'face') document.getElementById('tab-face').classList.add('active-tab');
+    if(tabName === 'legs') document.getElementById('tab-legs').classList.add('active-tab');
+    if(tabName === 'hats') document.getElementById('tab-hats').classList.add('active-tab');
+    if(tabName === 'effects') document.getElementById('tab-effects').classList.add('active-tab');
+    updateShopUI();
+}
 
 function openShop() {
-    updateShopUI();
+    changeShopTab('face');
     switchScreen('shop-screen');
 }
 
+// 카테고리 기반 상점 그리드 동적 렌더링
 function updateShopUI() {
     updateLobbyUI();
-    Object.keys(skinsConfig).forEach(skinKey => {
-        const btn = document.getElementById('btn-' + skinKey);
-        if(!btn) return;
-        if(userData.unlockedSkins.includes(skinKey)) {
-            btn.innerText = userData.currentSkin === skinKey ? "장착됨" : "장착하기";
-            btn.style.backgroundColor = userData.currentSkin === skinKey ? "#2ecc71" : "#3498db";
-        } else {
-            btn.innerText = `구매 (${skinsConfig[skinKey].price}G)`;
-            btn.style.backgroundColor = "#e67e22";
+    const container = document.getElementById('shop-items-container');
+    container.innerHTML = ''; // 초기화
+
+    const items = allItemsData[currentShopTab];
+    
+    // 해당 카테고리에 유저가 매핑중인 데이터 확인 키 세팅
+    let currentEquipped = '';
+    let unlockedList = [];
+    if(currentShopTab === 'face') { currentEquipped = userData.currentSkin; unlockedList = userData.unlockedSkins; }
+    if(currentShopTab === 'legs') { currentEquipped = userData.currentLeg; unlockedList = userData.unlockedLegs; }
+    if(currentShopTab === 'hats') { currentEquipped = userData.currentHat; unlockedList = userData.unlockedHats; }
+    if(currentShopTab === 'effects') { currentEquipped = userData.currentEffect; unlockedList = userData.unlockedEffects; }
+
+    Object.keys(items).forEach(key => {
+        const item = items[key];
+        const isUnlocked = unlockedList.includes(key);
+        const isEquipped = currentEquipped === key;
+        
+        const itemBox = document.createElement('div');
+        itemBox.className = 'shop-item';
+        
+        let btnText = `구매 (${item.price}G)`;
+        let btnStyle = "background-color: #e67e22;";
+        if(isUnlocked) {
+            btnText = isEquipped ? "장착됨" : "장착하기";
+            btnStyle = isEquipped ? "background-color: #2ecc71;" : "background-color: #3498db;";
         }
+
+        itemBox.innerHTML = `
+            <h4>${item.name}</h4>
+            <p>${isUnlocked ? '보유중' : '가격: ' + item.price + 'G'}</p>
+            <button style="${btnStyle}" onclick="buyOrEquipCustom('${currentShopTab}', '${key}')">${btnText}</button>
+        `;
+        container.appendChild(itemBox);
     });
 }
 
-function buyOrEquip(skinKey) {
-    if(userData.unlockedSkins.includes(skinKey)) {
-        equipSkin(skinKey);
+// 상점 구매 및 장착 비즈니스 로직 확장
+function buyOrEquipCustom(category, key) {
+    const item = allItemsData[category][key];
+    
+    let currentEquipped = '';
+    let unlockedList = [];
+    if(category === 'face') { currentEquipped = userData.currentSkin; unlockedList = userData.unlockedSkins; }
+    if(category === 'legs') { currentEquipped = userData.currentLeg; unlockedList = userData.unlockedLegs; }
+    if(category === 'hats') { currentEquipped = userData.currentHat; unlockedList = userData.unlockedHats; }
+    if(category === 'effects') { currentEquipped = userData.currentEffect; unlockedList = userData.unlockedEffects; }
+
+    if(unlockedList.includes(key)) {
+        // 바로 장착
+        if(category === 'face') userData.currentSkin = key;
+        if(category === 'legs') userData.currentLeg = key;
+        if(category === 'hats') userData.currentHat = key;
+        if(category === 'effects') userData.currentEffect = key;
+        saveUserData();
+        updateShopUI();
     } else {
-        if(userData.gold >= skinsConfig[skinKey].price) {
-            userData.gold -= skinsConfig[skinKey].price;
-            userData.unlockedSkins.push(skinKey);
-            userData.currentSkin = skinKey;
+        // 구매 진행
+        if(userData.gold >= item.price) {
+            userData.gold -= item.price;
+            unlockedList.push(key);
+            
+            if(category === 'face') userData.currentSkin = key;
+            if(category === 'legs') userData.currentLeg = key;
+            if(category === 'hats') userData.currentHat = key;
+            if(category === 'effects') userData.currentEffect = key;
+            
             saveUserData();
-            alert(`${skinsConfig[skinKey].name} 스킨을 구매하고 장착했습니다!`);
+            alert(`${item.name} 파츠를 구매하고 장착했습니다!`);
             updateShopUI();
         } else {
-            alert("골드가 부족합니다! 10스테이지를 완전히 클리어해서 골드를 모으세요.");
+            alert("골드가 부족합니다! 스테이지를 완주해서 보상을 얻으세요.");
         }
     }
-}
-
-function equipSkin(skinKey) {
-    userData.currentSkin = skinKey;
-    saveUserData();
-    updateShopUI();
 }
 
 
@@ -396,19 +455,16 @@ let currentStage = 1;
 let deaths = 0;
 let gameLoopId = null;
 
+// 실시간 잔상(이펙트) 목록 보관용 배열
+let effectsList = [];
+
 const player = {
-    x: 50,
-    y: 350,
-    width: 24, 
-    height: 36,
-    vx: 0,
-    vy: 0,
-    speed: 5,         
-    jumpForce: 12.5,   
-    baseSpeed: 5,
-    baseJump: 12.5,
-    grounded: false,
-    facing: 1
+    x: 50, y: 350,
+    width: 24, height: 36,
+    vx: 0, vy: 0,
+    speed: 5, jumpForce: 12.5,   
+    baseSpeed: 5, baseJump: 12.5,
+    grounded: false, facing: 1
 };
 
 const gravity = 0.48;
@@ -417,17 +473,12 @@ const keys = {};
 
 window.addEventListener('keydown', e => {
     keys[e.key] = true;
-    if(e.key === 'Escape' && gameLoopId) { 
-        exitToLobby();
-    }
+    if(e.key === 'Escape' && gameLoopId) exitToLobby();
 });
 window.addEventListener('keyup', e => keys[e.key] = false);
 
 function exitToLobby() {
-    if(gameLoopId) {
-        cancelAnimationFrame(gameLoopId);
-        gameLoopId = null;
-    }
+    if(gameLoopId) { cancelAnimationFrame(gameLoopId); gameLoopId = null; }
     updateLobbyUI();
     switchScreen('lobby-screen');
 }
@@ -441,16 +492,12 @@ const stages = {
     6: { playerStart: {x: 50, y: 350}, blocks: [{x: 0, y: 450, w: 120, h: 50, type: 1}, {x: 200, y: 360, w: 80, h: 20, type: 1}, {x: 340, y: 290, w: 60, h: 20, type: 2}, {x: 460, y: 240, w: 80, h: 20, type: 1}, {x: 620, y: 180, w: 180, h: 320, type: 1}, {x: 720, y: 80, w: 50, h: 100, type: 6}, {x: 150, y: 200, type: 7, text: "가운데 빨간 발판은 가시 함정입니다! 대시 점프로 넘어가세요."}] },
     7: { playerStart: {x: 50, y: 100}, blocks: [{x: 0, y: 180, w: 120, h: 20, type: 1}, {x: 180, y: 260, w: 80, h: 20, type: 3}, {x: 320, y: 460, w: 480, h: 40, type: 2}, {x: 420, y: 200, w: 120, h: 20, type: 4}, {x: 650, y: 250, w: 150, h: 250, type: 1}, {x: 730, y: 150, w: 50, h: 100, type: 6}, {x: 350, y: 420, type: 7, text: "바닥에 떨어지면 즉사입니다! 공중 콤보!"}] },
     8: { playerStart: {x: 50, y: 350}, blocks: [{x: 0, y: 450, w: 100, h: 50, type: 1}, {x: 160, y: 390, w: 60, h: 60, type: 5}, {x: 280, y: 320, w: 60, h: 130, type: 4}, {x: 420, y: 240, w: 60, h: 210, type: 3}, {x: 580, y: 180, w: 100, h: 20, type: 1}, {x: 720, y: 180, w: 80, h: 320, type: 1}, {x: 740, y: 80, w: 50, h: 100, type: 6}, {x: 150, y: 120, type: 7, text: "종합 선물 세트! 슬로우 -> 스피드 -> 점프 순서대로 뛰어넘으세요."}] },
-    
-    // 9스테이지 수정 완료: 가시벽을 넘은 후, 마지막 보라색 블록(type 5)에 도달하기 전 디딤돌 역할을 해줄 일반 발판({x: 610, y: 260})을 하나 더 추가했습니다.
     9: { playerStart: {x: 40, y: 350}, blocks: [{x: 0, y: 450, w: 100, h: 50, type: 1}, {x: 160, y: 320, w: 30, h: 180, type: 2}, {x: 250, y: 450, w: 80, h: 50, type: 3}, {x: 420, y: 200, w: 30, h: 300, type: 2}, {x: 610, y: 260, w: 40, h: 20, type: 1}, {x: 510, y: 300, w: 100, h: 20, type: 5}, {x: 680, y: 200, w: 120, h: 300, type: 1}, {x: 730, y: 100, w: 50, h: 100, type: 6}, {x: 210, y: 120, type: 7, text: "점프대를 강하게 밟아 중앙 가시벽을 넘어가세요!"}] },
-    
     10: { playerStart: {x: 40, y: 350}, blocks: [{x: 0, y: 450, w: 100, h: 50, type: 1}, {x: 100, y: 480, w: 580, h: 20, type: 2}, {x: 160, y: 360, w: 50, h: 20, type: 4}, {x: 290, y: 280, w: 50, h: 20, type: 3}, {x: 440, y: 220, w: 50, h: 20, type: 5}, {x: 570, y: 260, w: 50, h: 20, type: 3}, {x: 680, y: 400, w: 120, h: 100, type: 1}, {x: 730, y: 300, w: 50, h: 100, type: 6}, {x: 280, y: 80, type: 7, text: "🔥 FINAL STAGE: 리드미컬하게 공중 점프!"}] }
 };
 
 function startGame() {
-    currentStage = 1;
-    deaths = 0;
+    currentStage = 1; deaths = 0; effectsList = [];
     resetPlayer();
     switchScreen('game');
     updateInGameUI();
@@ -461,8 +508,7 @@ function resetPlayer() {
     const stage = stages[currentStage];
     player.x = stage.playerStart.x;
     player.y = stage.playerStart.y;
-    player.vx = 0;
-    player.vy = 0;
+    player.vx = 0; player.vy = 0;
     player.speed = player.baseSpeed;
     player.jumpForce = player.baseJump;
     player.grounded = false;
@@ -474,6 +520,7 @@ function updateInGameUI() {
     document.getElementById('ingame-gold').innerText = userData.gold;
 }
 
+// 종합 파츠 커스텀 캐릭터 렌더링 함수
 function drawCharacter(x, y, width, height, facing) {
     ctx.save();
     ctx.translate(x + width/2, y + height/2);
@@ -481,122 +528,121 @@ function drawCharacter(x, y, width, height, facing) {
 
     const w = width;
     const h = height;
-    const currentSkin = userData.currentSkin;
+    
+    const skin = userData.currentSkin;
+    const leg = userData.currentLeg;
+    const hat = userData.currentHat;
 
-    if (currentSkin === 'default') {
-        ctx.fillStyle = '#6d4c41'; 
-        ctx.fillRect(-w/2 + 2, -h/2 + 4, w - 4, 8);
+    // 1. 얼굴(스킨) 베이스 그리기
+    if (skin === 'default') {
+        ctx.fillStyle = '#6d4c41'; ctx.fillRect(-w/2 + 2, -h/2 + 4, w - 4, 8);
         ctx.fillRect(-2, -h/2, 4, 4); 
-        ctx.fillStyle = '#a1887f'; 
-        ctx.beginPath();
+        ctx.fillStyle = '#a1887f'; ctx.beginPath();
         ctx.moveTo(-w/2 + 2, -h/2 + 12); ctx.lineTo(w/2 - 2, -h/2 + 12);
         ctx.lineTo(w/2 - 4, -h/2 + 22); ctx.lineTo(0, -h/2 + 28); ctx.lineTo(-w/2 + 4, -h/2 + 22);
         ctx.closePath(); ctx.fill();
         ctx.fillStyle = '#000000'; ctx.fillRect(3, -h/2 + 14, 2, 2); ctx.fillRect(-5, -h/2 + 14, 2, 2); 
         ctx.fillStyle = '#e57373'; ctx.fillRect(5, -h/2 + 17, 2, 2);
-        ctx.strokeStyle = '#000000'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-1, -h/2 + 19); ctx.quadraticCurveTo(1, -h/2 + 21, 3, -h/2 + 19); ctx.stroke();
-
-    } else if (currentSkin === 'chestnut') {
-        ctx.fillStyle = '#5e2700'; 
-        ctx.beginPath();
-        ctx.moveTo(0, -h/2); ctx.lineTo(w/2, -h/2 + 16); ctx.lineTo(-w/2, -h/2 + 16);
-        ctx.closePath(); ctx.fill();
-        ctx.fillStyle = '#d35400'; 
-        ctx.fillRect(-w/2, -h/2 + 16, w, 10);
+    } else if (skin === 'chestnut') {
+        ctx.fillStyle = '#5e2700'; ctx.beginPath(); ctx.moveTo(0, -h/2); ctx.lineTo(w/2, -h/2 + 16); ctx.lineTo(-w/2, -h/2 + 16); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#d35400'; ctx.fillRect(-w/2, -h/2 + 16, w, 10);
         ctx.fillStyle = '#ffffff'; ctx.fillRect(3, -h/2 + 12, 2, 2); ctx.fillRect(-5, -h/2 + 12, 2, 2);
-        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-2, -h/2 + 17); ctx.lineTo(2, -h/2 + 17); ctx.stroke();
-
-    } else if (currentSkin === 'trophy') {
-        ctx.fillStyle = '#f1c40f'; 
-        ctx.fillRect(-w/2, -h/2, w, 16);
-        ctx.fillStyle = '#f39c12'; 
-        ctx.fillRect(-4, -h/2 + 16, 8, 8);
-        ctx.fillRect(-w/2 + 4, -h/2 + 24, w - 8, 4);
-        ctx.strokeStyle = '#f1c40f'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(-w/2, -h/2 + 6, 4, 0, Math.PI*2); ctx.stroke();
-        ctx.beginPath(); ctx.arc(w/2, -h/2 + 6, 4, 0, Math.PI*2); ctx.stroke();
-        ctx.fillStyle = '#000000'; ctx.font = 'bold 8px sans-serif'; ctx.fillText("v", -6, -h/2 + 6); ctx.fillText("v", 2, -h/2 + 6);
-
-    } else if (currentSkin === 'potato') {
-        ctx.fillStyle = '#e74c3c'; 
-        ctx.beginPath(); ctx.arc(0, -h/2 + 14, w/2, 0, Math.PI*2); ctx.fill();
-        ctx.fillRect(-w/2, -h/2 + 14, w, 12);
-        ctx.fillStyle = '#f4d03f'; 
-        ctx.beginPath(); ctx.arc(2, -h/2 + 14, 7, 0, Math.PI*2); ctx.fill();
+    } else if (skin === 'trophy') {
+        ctx.fillStyle = '#f1c40f'; ctx.fillRect(-w/2, -h/2, w, 16);
+        ctx.fillStyle = '#f39c12'; ctx.fillRect(-4, -h/2 + 16, 8, 8); ctx.fillRect(-w/2 + 4, -h/2 + 24, w - 8, 4);
+        ctx.strokeStyle = '#f1c40f'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(-w/2, -h/2 + 6, 4, 0, Math.PI*2); ctx.stroke(); ctx.beginPath(); ctx.arc(w/2, -h/2 + 6, 4, 0, Math.PI*2); ctx.stroke();
+    } else if (skin === 'potato') {
+        ctx.fillStyle = '#e74c3c'; ctx.beginPath(); ctx.arc(0, -h/2 + 14, w/2, 0, Math.PI*2); ctx.fill(); ctx.fillRect(-w/2, -h/2 + 14, w, 12);
+        ctx.fillStyle = '#f4d03f'; ctx.beginPath(); ctx.arc(2, -h/2 + 14, 7, 0, Math.PI*2); ctx.fill();
         ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 12, 1.5, 1.5); ctx.fillRect(-2, -h/2 + 12, 1.5, 1.5);
-        ctx.strokeStyle = '#000000'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, -h/2 + 16); ctx.lineTo(3, -h/2 + 16); ctx.stroke();
-
-    } else if (currentSkin === 'tiger') { 
-        ctx.fillStyle = '#e67e22'; 
-        ctx.fillRect(-w/2, -h/2 + 6, w, 22);
+    } else if (skin === 'tiger') { 
+        ctx.fillStyle = '#e67e22'; ctx.fillRect(-w/2, -h/2 + 6, w, 22);
         ctx.beginPath(); ctx.moveTo(-w/2, -h/2 + 6); ctx.lineTo(-w/2 + 6, -h/2); ctx.lineTo(-w/2 + 8, -h/2 + 6); ctx.fill();
         ctx.beginPath(); ctx.moveTo(w/2, -h/2 + 6); ctx.lineTo(w/2 - 6, -h/2); ctx.lineTo(w/2 - 8, -h/2 + 6); ctx.fill();
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(-w/2, -h/2 + 10, 6, 2); ctx.fillRect(w/2 - 6, -h/2 + 10, 6, 2);
-        ctx.fillRect(-w/2, -h/2 + 16, 8, 2); ctx.fillRect(w/2 - 8, -h/2 + 16, 8, 2);
-        ctx.fillRect(3, -h/2 + 12, 2, 2); ctx.fillRect(-5, -h/2 + 12, 2, 2);
-
-    } else if (currentSkin === 'takoyaki') { 
-        ctx.fillStyle = '#edc9a0'; 
-        ctx.beginPath(); ctx.arc(0, -h/2 + 16, w/2 + 2, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#5c3a21'; 
-        ctx.fillRect(-w/2 + 2, -h/2 + 6, w - 4, 4);
-        ctx.fillStyle = '#27ae60'; ctx.fillRect(-2, -h/2 + 5, 2, 2); ctx.fillRect(4, -h/2 + 8, 2, 2);
+        ctx.fillStyle = '#000000'; ctx.fillRect(-w/2, -h/2 + 10, 6, 2); ctx.fillRect(w/2 - 6, -h/2 + 10, 6, 2); ctx.fillRect(3, -h/2 + 12, 2, 2); ctx.fillRect(-5, -h/2 + 12, 2, 2);
+    } else if (skin === 'takoyaki') { 
+        ctx.fillStyle = '#edc9a0'; ctx.beginPath(); ctx.arc(0, -h/2 + 16, w/2 + 2, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#5c3a21'; ctx.fillRect(-w/2 + 2, -h/2 + 6, w - 4, 4);
         ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 14, 2, 2); ctx.fillRect(-4, -h/2 + 14, 2, 2);
-        ctx.strokeStyle = '#000000'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(0, -h/2 + 16, 2, 0, Math.PI); ctx.stroke();
-
-    } else if (currentSkin === 'baseball') { 
-        ctx.fillStyle = '#ffffff'; 
-        ctx.beginPath(); ctx.arc(0, -h/2 + 16, w/2 + 1, 0, Math.PI*2); ctx.fill();
-        ctx.strokeStyle = '#bdc3c7'; ctx.lineWidth = 1; ctx.stroke();
-        ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.arc(-w/2, -h/2 + 16, 10, -Math.PI/3, Math.PI/3); ctx.stroke();
-        ctx.beginPath(); ctx.arc(w/2, -h/2 + 16, 10, Math.PI - Math.PI/3, Math.PI + Math.PI/3); ctx.stroke();
+    } else if (skin === 'baseball') { 
+        ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(0, -h/2 + 16, w/2 + 1, 0, Math.PI*2); ctx.fill();
+        ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(-w/2, -h/2 + 16, 10, -Math.PI/3, Math.PI/3); ctx.stroke(); ctx.beginPath(); ctx.arc(w/2, -h/2 + 16, 10, Math.PI - Math.PI/3, Math.PI + Math.PI/3); ctx.stroke();
         ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 14, 2, 2); ctx.fillRect(-4, -h/2 + 14, 2, 2);
-
-    } else if (currentSkin === 'heart') { 
-        ctx.fillStyle = '#ff4757'; 
-        ctx.beginPath(); ctx.arc(-w/4, -h/2 + 12, w/4 + 1, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(w/4, -h/2 + 12, w/4 + 1, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-w/2 - 1, -h/2 + 14); ctx.lineTo(w/2 + 1, -h/2 + 14); ctx.lineTo(0, -h/2 + 28);
-        ctx.closePath(); ctx.fill();
-        ctx.fillStyle = '#ffffff'; ctx.fillRect(2, -h/2 + 11, 2, 2); ctx.fillRect(-4, -h/2 + 11, 2, 2);
-
-    } else if (currentSkin === 'duck') { 
-        ctx.fillStyle = '#f1c40f'; 
-        ctx.beginPath(); ctx.arc(0, -h/2 + 14, w/2 + 1, 0, Math.PI*2); ctx.fill();
-        ctx.fillRect(-w/2, -h/2 + 14, w, 12);
-        ctx.fillStyle = '#e67e22';
-        ctx.beginPath(); ctx.moveTo(w/2 - 2, -h/2 + 12); ctx.lineTo(w/2 + 7, -h/2 + 15); ctx.lineTo(w/2 - 2, -h/2 + 18); ctx.fill();
+    } else if (skin === 'heart') { 
+        ctx.fillStyle = '#ff4757'; ctx.beginPath(); ctx.arc(-w/4, -h/2 + 12, w/4 + 1, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(w/4, -h/2 + 12, w/4 + 1, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(-w/2 - 1, -h/2 + 14); ctx.lineTo(w/2 + 1, -h/2 + 14); ctx.lineTo(0, -h/2 + 28); ctx.closePath(); ctx.fill();
+    } else if (skin === 'duck') { 
+        ctx.fillStyle = '#f1c40f'; ctx.beginPath(); ctx.arc(0, -h/2 + 14, w/2 + 1, 0, Math.PI*2); ctx.fill(); ctx.fillRect(-w/2, -h/2 + 14, w, 12);
+        ctx.fillStyle = '#e67e22'; ctx.beginPath(); ctx.moveTo(w/2 - 2, -h/2 + 12); ctx.lineTo(w/2 + 7, -h/2 + 15); ctx.lineTo(w/2 - 2, -h/2 + 18); ctx.fill();
         ctx.fillStyle = '#000000'; ctx.fillRect(1, -h/2 + 10, 2, 2);
-
-    } else if (currentSkin === 'question') { 
-        ctx.fillStyle = '#9b59b6'; 
-        ctx.fillRect(-w/2, -h/2 + 4, w, 22);
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText("?", 0, -h/2 + 14);
+    } else if (skin === 'question') { 
+        ctx.fillStyle = '#9b59b6'; ctx.fillRect(-w/2, -h/2 + 4, w, 22);
+        ctx.fillStyle = '#ffffff'; ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText("?", 0, -h/2 + 14);
     }
 
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2.5;
-    ctx.lineCap = 'round';
+    // 2. 모자 파츠 그리기
+    if (hat === 'shell') {
+        ctx.fillStyle = '#a0522d';
+        ctx.beginPath(); ctx.moveTo(-w/2 - 2, -h/2 + 4); ctx.lineTo(0, -h/2 - 10); ctx.lineTo(w/2 + 2, -h/2 + 4); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#f1c40f'; ctx.fillRect(-2, -h/2 - 4, 4, 4); // 가시 포인트
+    } else if (hat === 'baseballCap') {
+        ctx.fillStyle = '#2980b9'; ctx.beginPath(); ctx.arc(0, -h/2 + 3, w/2, Math.PI, 0); ctx.fill();
+        ctx.fillStyle = '#c0392b'; ctx.fillRect(0, -h/2 + 1, w/2 + 6, 3); // 모자 챙
+    } else if (hat === 'partyCap') {
+        ctx.fillStyle = '#e74c3c'; ctx.beginPath(); ctx.moveTo(-w/3, -h/2 + 3); ctx.lineTo(0, -h/2 - 16); ctx.lineTo(w/3, -h/2 + 3); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#f1c40f'; ctx.beginPath(); ctx.arc(0, -h/2 - 16, 3, 0, Math.PI*2); ctx.fill(); // 방울
+    } else if (hat === 'katsuobushi') {
+        ctx.fillStyle = '#deb887';
+        ctx.save(); ctx.rotate(0.2); ctx.fillRect(-6, -h/2 - 2, 14, 4); ctx.restore();
+        ctx.save(); ctx.rotate(-0.1); ctx.fillRect(-10, -h/2 - 4, 12, 3); ctx.restore();
+    } else if (hat === 'angelRing') {
+        ctx.strokeStyle = '#f1c40f'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.ellipse(0, -h/2 - 8, 10, 3, 0, 0, Math.PI*2); ctx.stroke();
+    }
+
+    // 3. 다리 파츠 그리기 (이동 애니메이션 결합)
     const bodyBottomY = -h/2 + 26;
+    let leftLegX = -4, rightLegX = 4;
+    let legYOffset = h/2;
 
-    ctx.beginPath();
+    let swing = 0;
     if (Math.abs(player.vx) > 0.5 && player.grounded) {
-        const walkCycle = Math.sin(Date.now() * 0.015) * 5;
-        ctx.moveTo(-3, bodyBottomY); ctx.lineTo(-5 + walkCycle, h/2);
-        ctx.moveTo(3, bodyBottomY); ctx.lineTo(5 - walkCycle, h/2);
-    } else {
-        ctx.moveTo(-3, bodyBottomY); ctx.lineTo(-5, h/2);
-        ctx.moveTo(3, bodyBottomY); ctx.lineTo(5, h/2);
+        swing = Math.sin(Date.now() * 0.015) * 6;
     }
-    ctx.stroke();
 
+    ctx.save();
+    ctx.lineWidth = 3.5;
+    ctx.lineCap = 'round';
+
+    if (leg === 'default') {
+        ctx.strokeStyle = '#000000';
+        ctx.beginPath(); ctx.moveTo(leftLegX, bodyBottomY); ctx.lineTo(leftLegX - 2 + swing, legYOffset); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(rightLegX, bodyBottomY); ctx.lineTo(rightLegX + 2 - swing, legYOffset); ctx.stroke();
+    } else if (leg === 'wood') {
+        ctx.strokeStyle = '#8b5a2b'; ctx.lineWidth = 5; // 단단한 나무느낌
+        ctx.beginPath(); ctx.moveTo(leftLegX, bodyBottomY); ctx.lineTo(leftLegX + swing, legYOffset); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(rightLegX, bodyBottomY); ctx.lineTo(rightLegX - swing, legYOffset); ctx.stroke();
+    } else if (leg === 'tigerLeg') {
+        ctx.strokeStyle = '#e67e22'; ctx.lineWidth = 5;
+        ctx.beginPath(); ctx.moveTo(leftLegX, bodyBottomY); ctx.lineTo(leftLegX + swing, legYOffset); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(rightLegX, bodyBottomY); ctx.lineTo(rightLegX - swing, legYOffset); ctx.stroke();
+        ctx.strokeStyle = '#000000'; ctx.lineWidth = 2; // 호랑이 줄무늬 각인
+        ctx.beginPath(); ctx.moveTo(leftLegX, bodyBottomY + 4); ctx.lineTo(leftLegX + 2, bodyBottomY + 4); ctx.stroke();
+    } else if (leg === 'duckLeg') {
+        ctx.strokeStyle = '#f39c12'; ctx.lineWidth = 4;
+        // 왼다리 + 오리발
+        ctx.beginPath(); ctx.moveTo(leftLegX, bodyBottomY); ctx.lineTo(leftLegX + swing, legYOffset - 2); ctx.stroke();
+        ctx.fillStyle = '#f39c12'; ctx.fillRect(leftLegX + swing - 3, legYOffset - 2, 6, 3);
+        // 오른다리 + 오리발
+        ctx.beginPath(); ctx.moveTo(rightLegX, bodyBottomY); ctx.lineTo(rightLegX - swing, legYOffset - 2); ctx.stroke();
+        ctx.fillRect(rightLegX - swing - 3, legYOffset - 2, 6, 3);
+    } else if (leg === 'toothpick') {
+        ctx.strokeStyle = '#f5f5dc'; ctx.lineWidth = 1.5; // 매우 얇은 가시 다리
+        ctx.beginPath(); ctx.moveTo(leftLegX, bodyBottomY); ctx.lineTo(leftLegX + swing, legYOffset); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(rightLegX, bodyBottomY); ctx.lineTo(rightLegX - swing, legYOffset); ctx.stroke();
+    }
+
+    ctx.restore();
     ctx.restore();
 }
 
@@ -608,6 +654,19 @@ function checkCollision(rect1, rect2) {
 }
 
 function update() {
+    // 실시간 캐릭터 잔상 이펙트 스폰 로직 (움직임이 감지될 때)
+    if ((Math.abs(player.vx) > 0.2 || Math.abs(player.vy) > 0.2) && userData.currentEffect !== 'default') {
+        // 프레임 부하를 줄이기 위해 소량의 난수 주기로 생성
+        if (Math.random() < 0.35) {
+            effectsList.push({
+                x: player.x + player.width / 2,
+                y: player.y + player.height - 4,
+                type: userData.currentEffect,
+                spawnTime: Date.now()
+            });
+        }
+    }
+
     if (keys['ArrowRight'] || keys['d'] || keys['D']) {
         player.vx = player.speed; player.facing = 1;
     } else if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
@@ -662,17 +721,22 @@ function update() {
     }
 
     if (player.y > canvas.height) handleDeath();
+
+    // 0.5초 경과한 소멸 대상 이펙트 필터링 처리 ($500\text{ms}$)
+    const now = Date.now();
+    effectsList = effectsList.filter(eff => now - eff.spawnTime < 500);
 }
 
 function handleDeath() {
     deaths++;
+    effectsList = [];
     updateInGameUI();
     resetPlayer();
 }
 
 function nextStage() {
     currentStage++;
-    
+    effectsList = [];
     if (currentStage > 10) {
         userData.gold += 100;
         saveUserData();
@@ -684,10 +748,48 @@ function nextStage() {
     }
 }
 
+// 지나간 자리에 남는 실시간 이펙트 렌더링 시스템
+function drawEffects() {
+    const now = Date.now();
+    effectsList.forEach(eff => {
+        const elapsed = now - eff.spawnTime;
+        const opacity = Math.max(0, 1 - (elapsed / 500)); // 시간에 따라 서서히 투명화
+        
+        ctx.save();
+        ctx.globalAlpha = opacity;
+
+        if (eff.type === 'spikeEff') {
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath(); ctx.moveTo(eff.x - 5, eff.y); ctx.lineTo(eff.x, eff.y - 8); ctx.lineTo(eff.x + 5, eff.y); ctx.fill();
+        } else if (eff.type === 'sproutEff') {
+            ctx.strokeStyle = '#2ecc71'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(eff.x, eff.y); ctx.quadraticCurveTo(eff.x + 4, eff.y - 6, eff.x + 6, eff.y - 8); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(eff.x, eff.y); ctx.quadraticCurveTo(eff.x - 4, eff.y - 6, eff.x - 6, eff.y - 8); ctx.stroke();
+        } else if (eff.type === 'teriyakiEff') {
+            ctx.fillStyle = '#4a2711';
+            ctx.beginPath(); ctx.arc(eff.x, eff.y - 2, 4, 0, Math.PI * 2); ctx.fill();
+        } else if (eff.type === 'runEff') {
+            ctx.fillStyle = '#ecf0f1';
+            ctx.beginPath(); ctx.arc(eff.x - 4, eff.y - 2, 3, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(eff.x + 2, eff.y - 4, 2, 0, Math.PI * 2); ctx.fill();
+        } else if (eff.type === 'duckFootEff') {
+            ctx.fillStyle = '#f39c12';
+            ctx.fillRect(eff.x - 3, eff.y - 2, 6, 3);
+        } else if (eff.type === 'heartEff') {
+            ctx.fillStyle = '#ff4757';
+            ctx.font = '12px sans-serif';
+            ctx.fillText("♥", eff.x - 5, eff.y - 2);
+        }
+
+        ctx.restore();
+    });
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const stage = stages[currentStage];
 
+    // 블록 그리기
     for (let block of stage.blocks) {
         switch(block.type) {
             case 1: ctx.fillStyle = '#8d6e63'; ctx.fillRect(block.x, block.y, block.w, block.h); ctx.strokeStyle = '#5d4037'; ctx.strokeRect(block.x, block.y, block.w, block.h); break;
@@ -699,6 +801,11 @@ function draw() {
             case 7: ctx.fillStyle = '#ecf0f1'; ctx.font = 'bold 13px sans-serif'; ctx.fillText(block.text, block.x, block.y); break;
         }
     }
+
+    // 잔상 이펙트 드로우
+    drawEffects();
+
+    // 메인 캐릭터 드로우
     drawCharacter(player.x, player.y, player.width, player.height, player.facing);
 }
 
