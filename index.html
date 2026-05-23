@@ -65,7 +65,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             margin-top: 15px;
-            max-height: 350px;
+            max-height: 380px;
             overflow-y: auto;
             padding-right: 5px;
         }
@@ -79,8 +79,8 @@
             border-radius: 8px;
             border: 2px solid #7f8c8d;
         }
-        .shop-item h4 { margin: 5px 0; }
-        .shop-item p { margin: 5px 0; font-size: 14px; color: #bdc3c7; }
+        .shop-item h4 { margin: 5px 0; font-size: 15px; }
+        .shop-item p { margin: 5px 0; font-size: 13px; color: #bdc3c7; }
         .shop-item button { font-size: 14px; padding: 6px 12px; width: 100%; margin: 5px 0 0 0; }
 
         /* 게임 화면 스타일 */
@@ -195,7 +195,6 @@
                 <p>가격: 150G</p>
                 <button id="btn-potato" onclick="buyOrEquip('potato')">구매</button>
             </div>
-            <!-- 신규 스킨 4종 추가 -->
             <div class="shop-item" id="item-tiger">
                 <h4>산중호걸 (호랑이)</h4>
                 <p>가격: 150G</p>
@@ -215,6 +214,17 @@
                 <h4>한승민&배주아</h4>
                 <p>가격: 150G</p>
                 <button id="btn-heart" onclick="buyOrEquip('heart')">구매</button>
+            </div>
+            <!-- 최신 신규 스킨 2종 추가 -->
+            <div class="shop-item" id="item-duck">
+                <h4>곽여진 (오리)</h4>
+                <p>가격: 150G</p>
+                <button id="btn-duck" onclick="buyOrEquip('duck')">구매</button>
+            </div>
+            <div class="shop-item" id="item-question">
+                <h4>백서준 (물음표)</h4>
+                <p>가격: 150G</p>
+                <button id="btn-question" onclick="buyOrEquip('question')">구매</button>
             </div>
         </div>
         <hr style="border-color:#7f8c8d; margin-top:20px;">
@@ -252,7 +262,9 @@ const skinNames = {
     tiger: '산중호걸 (호랑이)',
     takoyaki: '타코야끼',
     baseball: '이성연 (야구공)',
-    heart: '한승민&배주아 (하트)'
+    heart: '한승민&배주아 (하트)',
+    duck: '곽여진 (오리)',
+    question: '백서준 (물음표)'
 };
 
 function switchScreen(screenId) {
@@ -324,7 +336,7 @@ function saveUserData() {
     }
 }
 
-// --- 상점 시스템 ---
+// --- 상점 데이터 세팅 ---
 const skinsConfig = {
     chestnut: { name: "밤톨이", price: 150 },
     trophy: { name: "빅토리", price: 150 },
@@ -332,7 +344,9 @@ const skinsConfig = {
     tiger: { name: "산중호걸", price: 150 },
     takoyaki: { name: "타코야끼", price: 150 },
     baseball: { name: "이성연", price: 150 },
-    heart: { name: "한승민&배주아", price: 150 }
+    heart: { name: "한승민&배주아", price: 150 },
+    duck: { name: "곽여진", price: 150 },
+    question: { name: "백서준", price: 150 }
 };
 
 function openShop() {
@@ -463,7 +477,7 @@ function updateInGameUI() {
     document.getElementById('ingame-gold').innerText = userData.gold;
 }
 
-// --- 캐릭터 그래픽 랜더링 (신규 스킨 추가 완료) ---
+// --- 캐릭터 그래픽 렌더링 (오리 및 물음표 스킨 엔진 구현) ---
 function drawCharacter(x, y, width, height, facing) {
     ctx.save();
     ctx.translate(x + width/2, y + height/2);
@@ -516,52 +530,62 @@ function drawCharacter(x, y, width, height, facing) {
         ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 12, 1.5, 1.5); ctx.fillRect(-2, -h/2 + 12, 1.5, 1.5);
         ctx.strokeStyle = '#000000'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, -h/2 + 16); ctx.lineTo(3, -h/2 + 16); ctx.stroke();
 
-    } else if (currentSkin === 'tiger') { // 🐯 산중호걸 (호랑이)
-        ctx.fillStyle = '#e67e22'; // 주황색 몸통
+    } else if (currentSkin === 'tiger') { 
+        ctx.fillStyle = '#e67e22'; 
         ctx.fillRect(-w/2, -h/2 + 6, w, 22);
-        // 호랑이 귀
         ctx.beginPath(); ctx.moveTo(-w/2, -h/2 + 6); ctx.lineTo(-w/2 + 6, -h/2); ctx.lineTo(-w/2 + 8, -h/2 + 6); ctx.fill();
         ctx.beginPath(); ctx.moveTo(w/2, -h/2 + 6); ctx.lineTo(w/2 - 6, -h/2); ctx.lineTo(w/2 - 8, -h/2 + 6); ctx.fill();
-        // 호랑이 검은 줄무늬
         ctx.fillStyle = '#000000';
         ctx.fillRect(-w/2, -h/2 + 10, 6, 2); ctx.fillRect(w/2 - 6, -h/2 + 10, 6, 2);
         ctx.fillRect(-w/2, -h/2 + 16, 8, 2); ctx.fillRect(w/2 - 8, -h/2 + 16, 8, 2);
-        // 눈
         ctx.fillRect(3, -h/2 + 12, 2, 2); ctx.fillRect(-5, -h/2 + 12, 2, 2);
 
-    } else if (currentSkin === 'takoyaki') { // 🐙 타코야끼
-        ctx.fillStyle = '#edc9a0'; // 타코야끼 빵 색상
+    } else if (currentSkin === 'takoyaki') { 
+        ctx.fillStyle = '#edc9a0'; 
         ctx.beginPath(); ctx.arc(0, -h/2 + 16, w/2 + 2, 0, Math.PI*2); ctx.fill();
-        // 갈색 소스 표현
         ctx.fillStyle = '#5c3a21'; 
         ctx.fillRect(-w/2 + 2, -h/2 + 6, w - 4, 4);
-        // 가쓰오부시/파 초록 점들
         ctx.fillStyle = '#27ae60'; ctx.fillRect(-2, -h/2 + 5, 2, 2); ctx.fillRect(4, -h/2 + 8, 2, 2);
-        // 눈코입
         ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 14, 2, 2); ctx.fillRect(-4, -h/2 + 14, 2, 2);
         ctx.strokeStyle = '#000000'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(0, -h/2 + 16, 2, 0, Math.PI); ctx.stroke();
 
-    } else if (currentSkin === 'baseball') { // ⚾ 이성연 (야구공)
-        ctx.fillStyle = '#ffffff'; // 하얀 야구공
+    } else if (currentSkin === 'baseball') { 
+        ctx.fillStyle = '#ffffff'; 
         ctx.beginPath(); ctx.arc(0, -h/2 + 16, w/2 + 1, 0, Math.PI*2); ctx.fill();
         ctx.strokeStyle = '#bdc3c7'; ctx.lineWidth = 1; ctx.stroke();
-        // 빨간 실밥 실선
         ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5;
         ctx.beginPath(); ctx.arc(-w/2, -h/2 + 16, 10, -Math.PI/3, Math.PI/3); ctx.stroke();
         ctx.beginPath(); ctx.arc(w/2, -h/2 + 16, 10, Math.PI - Math.PI/3, Math.PI + Math.PI/3); ctx.stroke();
-        // 얼굴 눈동자
         ctx.fillStyle = '#000000'; ctx.fillRect(2, -h/2 + 14, 2, 2); ctx.fillRect(-4, -h/2 + 14, 2, 2);
 
-    } else if (currentSkin === 'heart') { // 💖 한승민&배주아 (하트)
-        ctx.fillStyle = '#ff4757'; // 하트 핑크/레드
-        // 두 개의 원과 삼각형으로 하트 그리기
+    } else if (currentSkin === 'heart') { 
+        ctx.fillStyle = '#ff4757'; 
         ctx.beginPath(); ctx.arc(-w/4, -h/2 + 12, w/4 + 1, 0, Math.PI*2); ctx.fill();
         ctx.beginPath(); ctx.arc(w/4, -h/2 + 12, w/4 + 1, 0, Math.PI*2); ctx.fill();
         ctx.beginPath();
         ctx.moveTo(-w/2 - 1, -h/2 + 14); ctx.lineTo(w/2 + 1, -h/2 + 14); ctx.lineTo(0, -h/2 + 28);
         ctx.closePath(); ctx.fill();
-        // 깜찍한 눈
         ctx.fillStyle = '#ffffff'; ctx.fillRect(2, -h/2 + 11, 2, 2); ctx.fillRect(-4, -h/2 + 11, 2, 2);
+
+    } else if (currentSkin === 'duck') { // 🦆 곽여진 (오리)
+        ctx.fillStyle = '#f1c40f'; // 노란색 본체
+        ctx.beginPath(); ctx.arc(0, -h/2 + 14, w/2 + 1, 0, Math.PI*2); ctx.fill();
+        ctx.fillRect(-w/2, -h/2 + 14, w, 12);
+        // 주황색 부리
+        ctx.fillStyle = '#e67e22';
+        ctx.beginPath(); ctx.moveTo(w/2 - 2, -h/2 + 12); ctx.lineTo(w/2 + 7, -h/2 + 15); ctx.lineTo(w/2 - 2, -h/2 + 18); ctx.fill();
+        // 눈
+        ctx.fillStyle = '#000000'; ctx.fillRect(1, -h/2 + 10, 2, 2);
+
+    } else if (currentSkin === 'question') { // ❓ 백서준 (물음표)
+        ctx.fillStyle = '#9b59b6'; // 신비로운 보라색 몸통
+        ctx.fillRect(-w/2, -h/2 + 4, w, 22);
+        // 몸 한가운데 물음표 그리기
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText("?", 0, -h/2 + 14);
     }
 
     // 캐릭터 공통 다리 및 이동 애니메이션 처리
@@ -653,7 +677,6 @@ function handleDeath() {
 function nextStage() {
     currentStage++;
     
-    // 최종 10스테이지 올 클리어 보상 처리
     if (currentStage > 10) {
         userData.gold += 100;
         saveUserData();
